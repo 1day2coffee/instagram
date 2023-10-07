@@ -1,4 +1,9 @@
 from django.db import models
+# import os
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "instagram.settings")
+#
+# import django
+# django.setup()
 
 # Create your models here.
 class Feed(models.Model):
