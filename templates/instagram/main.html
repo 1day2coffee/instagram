@@ -9,6 +9,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 
+    <!-- jquery 사용하기 위해 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
   <!-- 구글 머티리얼 아이콘 -->
   <link
     href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
@@ -163,7 +166,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -208,23 +211,6 @@
 
 </style>
 
-<div id="modal_add_feed" class="modal_overlay">
-    <div class="modal_window">
-        <div class="modal_title">
-            <div class="modal_title_side"></div>
-            <div> 새 게시물 </div>
-            <div class="modal_title_side">
-                <span id="close_modal" class="material-icons-outlined">
-                    close
-                </span>
-            </div>
-        </div>
-        <div class="modal_image_upload">
-
-        </div>
-    </div>
-</div>
-
 <body>
 <!-- 상단 내비게이션 바 -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom" style="width: 100%;height: 50px;position: fixed;" >
@@ -235,7 +221,7 @@
     <div>
       <span class="material-icons">home</span>
       <span class="material-icons">send</span>
-      <span class="material-icons-outlined">add_box</span>
+      <span id="add_feed" class="material-icons-outlined">add_box</span>
       <span class="material-icons-outlined">explore</span>
       <span class="material-icons-outlined">favorite_border</span>
     </div>
@@ -244,7 +230,7 @@
 
 <!-- 바디 영역 -->
 
-
+<div class="main_body">
   <div class="left_body">
       {% for feed in feed_list %}
     <div class="border feed_box">
@@ -287,6 +273,7 @@
     </div>
       {% endfor %}
   </div>
+
   <div class="right_body">
     <div class="feed_name" style="justify-content: space-between">
       <div style="display: flex; align-items: center; ">
@@ -384,11 +371,95 @@
 
     </div>
   </div>
+
+    <div id="modal_add_feed" class="modal_overlay">
+        <div class="modal_window">
+            <div class="modal_title">
+                <div class="modal_title_side"></div>
+                <div> 새 게시물 </div>
+                <div class="modal_title_side">
+                    <span id="close_modal" class="material-icons-outlined">
+                        close
+                    </span>
+                </div>
+            </div>
+            <div class="modal_image_upload">
+
+            </div>
+        </div>
+    </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
         crossorigin="anonymous"></script>
+
+<script>
+    // 모달 띄우기 코드
+    const modal = document.getElementById("modal_add_feed");
+    const buttonAddFeed = document.getElementById("add_feed");
+    buttonAddFeed.addEventListener("click", e => {
+        modal.style.display = "flex";
+        document.body.style.overflowY = "hidden"; // 스크롤 없애기
+    });
+
+    // 모달 닫기 코드
+    const buttonCloseModal = document.getElementById("close_modal");
+    buttonCloseModal.addEventListener("click", e => {
+        modal.style.display = "none";
+        document.body.style.overflowY = "visible";
+    });
+
+    <!-- jquery 부분 -->
+
+    $('.modal_image_upload')
+        .on("dragover", dragOver)
+        .on("dragleave", dragOver)
+        .on("drop", uploadFiles);
+
+    function dragOver(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (e.type == "dragover") {
+            $(e.target).css({
+                "background-color": "black",
+                "outline-offset": "-20px"
+            });
+        } else {
+            $(e.target).css({
+                "background-color": "white",
+                "outline-offset": "-10px"
+            });
+        }
+    }
+
+    function uploadFiles(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        e.dataTransfer = e.originalEvent.dataTransfer;
+        var files =  e.dataTransfer.files;
+
+        if (files.length > 1) {
+            alert('하나만 올려주세요.');
+            return;
+        }
+
+        if (files[0].type.match(/image.*/)) {
+            $(e.target).css({
+                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+                "outline": "none",
+                "background-size": "100% 100%"});
+        }else{
+            alert('이미지가 아닙니다.');
+            return;
+        }
+
+    }
+
+</script>
 
 </body>
 </html>
