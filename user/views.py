@@ -11,11 +11,11 @@ class Join(APIView):
 
     def post(self, request):
         email = request.data.get('email', None)
-        nickname = request.data.get('nickname', None)
+        user_id = request.data.get('user_id', None)
         name = request.data.get('name', None)
         password = request.data.get('password', None)
 
-        User.objects.create(email=email, nickname=nickname, name=name, password=password)
+        User.objects.create(email=email, user_id=user_id, name=name, password=password)
 
         return Response(status=200)
 

@@ -11,10 +11,10 @@ class User(AbstractBaseUser):
         유저 비밀번호
     """
     profile_image = models.TextField()
-    nickname = models.CharField(max_length=24, unique=True)
+    user_id = models.CharField(max_length=24, unique=True)
     name = models.CharField(max_length=24)
     email = models.EmailField(unique=True)
 
-    USERNAME_FIELD = 'nickname'
+    USERNAME_FIELD = 'user_id'
     class Meta:
         db_table = "User"
