@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import Join, Login
-from instagram.views import Main
+from content.views import Main
 
 urlpatterns = [
     path('join', Join.as_view(), name='join'),

@@ -315,11 +315,11 @@
       <div style="display: flex; align-items: center; ">
         <div class="big_profile_box">
           <img class="profile_img"
-               src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-512.png">
+               src={{ user.profile_image }}>
         </div>
         <div class="name_content">
-          <span class="feed_name_txt"> 1day2coffee </span>
-          <span class="name_content_txt"> Park JinYoung</span>
+          <span class="feed_name_txt"> {{ user.user_id }}</span>
+          <span class="name_content_txt"> {{ user.name }}</span>
         </div>
       </div>
 

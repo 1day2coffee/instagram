@@ -6,12 +6,26 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from content.models import Feed
 from instagram.settings import MEDIA_ROOT
+from user.models import User
 
 
 class Main(APIView):
     def get(self, request):
         feed_list = Feed.objects.all().order_by("-id")
-        return render(request, 'instagram/main.html', context=dict(feed_list=feed_list))
+        print(request.session['email'])
+
+        email = request.session['email']
+
+        if email is None:
+            return render(request, "user/login.html")
+
+        user = User.objects.filter(email=email).first()
+        print(user)
+
+        if user is None:
+            return render(request, "user/login.html")
+
+        return render(request, 'instagram/main.html', context=dict(feed_list=feed_list, user=user))
 
 class UploadFeed(APIView):
     def post(self, request):
