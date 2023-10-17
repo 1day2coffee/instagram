@@ -52,3 +52,8 @@ class Login(APIView):
         request.session['email'] = user.email
 
         return Response(status=200, data=dict(message='로그인에 성공했습니다.'))
+
+class LogOut(APIView):
+    def get(self, request):
+        request.session.flush()
+        return render(request, 'user/login.html')
