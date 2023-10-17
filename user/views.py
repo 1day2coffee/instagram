@@ -1,7 +1,11 @@
+import os
+from uuid import uuid4
+
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import User
+from instagram.settings import MEDIA_ROOT
 from django.contrib.auth.hashers import make_password, check_password
 
 
@@ -21,7 +25,8 @@ class Join(APIView):
         elif User.objects.filter(user_id=user_id).exists() :
             return Response(status=500, data=dict(message='사용자 이름 "' + user_id + '"이(가) 존재합니다.'))
 
-        User.objects.create(password=make_password(password),email=email, user_id=user_id, name=name)
+        User.objects.create(password=make_password(password),email=email, user_id=user_id, name=name,
+                            profile_image="default_image.jpg")
 
         return Response(status=200, data=dict(message="회원가입 성공했습니다. 로그인 해주세요."))
 
@@ -57,3 +62,28 @@ class LogOut(APIView):
     def get(self, request):
         request.session.flush()
         return render(request, 'user/login.html')
+
+class UpdateProfile(APIView):
+    def post(self, request):
+        email = request.session.get('email', None)
+        if email is None:
+            return render(request, 'user/login.html')
+
+        user = User.objects.filter(email=email).first()
+        if user is None:
+            return render(request, 'user/login.html')
+
+        file = request.FILES['file']
+        if file is None:
+            return Response(status=500)
+
+        uuid_name = uuid4().hex
+        save_path = os.path.join(MEDIA_ROOT, uuid_name)
+        with open(save_path, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+
+        user.thumbnail = uuid_name
+        user.save()
+
+        return Response(status=200, data=dict(uuid=uuid_name))

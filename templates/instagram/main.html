@@ -22,7 +22,7 @@
 </head>
 
 <style>
-.main_body {
+    .main_body {
         display: flex;
         justify-content: center;
         padding-top: 50px;
@@ -43,6 +43,14 @@
         height: 1000px;
         left: 72%;
         position: fixed
+    }
+
+    .navi_profile_box {
+        width: 30px;
+        height: 30px;
+        border-radius: 70%;
+        overflow: hidden;
+        cursor: pointer;
     }
 
     .feed_box {
@@ -288,7 +296,7 @@
     <div class="border feed_box">
       <div class="feed_name">
         <div class="profile_box">
-          <img class="profile_img" src={{feed.profile_image}}>
+          <img class="profile_img" src="{% get_media_prefix %}{{feed.profile_image}}">
         </div>
         <span class="feed_name_txt"> {{ feed.user_id }} </span>
       </div>
