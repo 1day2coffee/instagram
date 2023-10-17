@@ -23,3 +23,11 @@ class Join(APIView):
 class Login(APIView):
     def get(self, request):
         return render(request, 'user/login.html')
+
+    def post(self, request):
+        email = request.data.get('email', None)
+        password = request.data.get('password', None)
+
+        User.objects.create(email=email, password=password)
+
+        return Response(status=200)
