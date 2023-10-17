@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from content.views import Main, UploadFeed
 from django.conf.urls.static import static
+from .views import Profile
 from instagram import settings
 
 urlpatterns = [

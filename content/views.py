@@ -19,7 +19,6 @@ class Main(APIView):
             return render(request, "user/login.html")
 
         user = User.objects.filter(email=email).first()
-        print(user)
 
         if user is None:
             return render(request, "user/login.html")
